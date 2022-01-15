@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  realsense-ready:
+    container_name: realsense-2-container
+    image: lmwafer/realsense-ready:2.0-ubuntu18.04
+    restart: always
+    privileged: true
+    ports:
+      - "8084:8084"
+    environment:
+      - DISPLAY=$DISPLAY
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./app:/app:rw
+      - /dev:/dev:ro
+    stdin_open: true
+    tty: true
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            device_ids: ['0']
+            capabilities: [gpu]
